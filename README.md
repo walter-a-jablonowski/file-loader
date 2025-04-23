@@ -16,9 +16,24 @@ Config
 
 ```php
 $config = [
-  'prefixes'   => ['#', 'id-'],  // ID prefixes to look for
-  'loadFolder' => false,         // load filder path only, instead default is - DESC
-  'useMsgs'    => false          // Show processing messages
+  'prefixes'    => ['#', 'id-'],  // ID prefixes to look for
+  'loadFolder'  => false,         // load filder path only, instead default is - DESC
+  'msgCallback' => null           // Callback function for processing messages
+];
+
+$config = [
+  'prefixes'    => ['#', 'id-'],
+  'msgCallback' => function ( $type, $arg1 = null ) {
+    switch( $type ) {
+      case 'update_cache_start':
+        echo "<b>Updating cache for $arg1 ...</b><br>\n";
+        break;
+      case 'processing_file':
+        echo "<b>Processing:</b> $arg1<br>\n";
+        break;
+      // misc message types: update_cache_end, processing_file_relative
+    }
+  };
 ];
 
 $config = ['prefixes' => null];  // no prefixes (tags)
