@@ -71,6 +71,19 @@ class FileLoader
       $r = array_merge( $r, $this->recurse( $base, $idStrings ));
 
     file_put_contents( $this->cacheFil, json_encode( $r, JSON_PRETTY_PRINT));
+
+    // Shared cache (update)
+
+    if( isset($this->config['sharedCache']) ) {
+      $sharedCache = is_file($this->config['sharedCache']) 
+                   ? json_decode( file_get_contents($this->config['sharedCache']), true )
+                   : [];
+      
+      foreach ($r as $idString => $fil) {
+        $sharedCache[$idString] = $fil;
+      }
+      file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
+    }
   }
 
   public function source( $base, $idString )
@@ -123,7 +136,7 @@ class FileLoader
         return $cache[$idString];
     }
 
-    // Check shared cache if available
+    // Shared cache
 
     if( isset($this->config['sharedCache']) && is_file($this->config['sharedCache']))
     {
@@ -136,7 +149,7 @@ class FileLoader
         if( ! is_array($cache))
           $cache = [];
         
-        $this->cache[$idString] = $sharedCache[$idString];
+        $cache[$idString] = $sharedCache[$idString];
         file_put_contents( $this->cacheFil, json_encode( $cache, JSON_PRETTY_PRINT));
         
         // Return the file with same logic as above
@@ -192,6 +205,17 @@ class FileLoader
       $cache[$idString] = $fil;
 
       file_put_contents( $this->cacheFil, json_encode( $cache, JSON_PRETTY_PRINT));
+      
+      // Shared cache (update)
+
+      if( isset($this->config['sharedCache']) ) {
+        $sharedCache = is_file($this->config['sharedCache']) 
+                     ? json_decode( file_get_contents($this->config['sharedCache']), true )
+                     : [];
+        
+        $sharedCache[$idString] = $fil;
+        file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
+      }
     }
 
     // Return
@@ -217,9 +241,9 @@ class FileLoader
     elseif( is_dir($fil))
     {
       if( ! $this->config['loadFolder'])
-        return find_desc( $cache[$idString], $this->config['descPattern'] );
+        return find_desc( $fil, $this->config['descPattern'] );
       else
-        return $cache[$idString];
+        return $fil;
     }
     else
       return $fil;
@@ -288,6 +312,19 @@ class FileLoader
         if( ! in_array('*', $idStrings) && count($r) === count($idStrings))
           return $r;
       }
+    }
+
+    // Shared cache (update)
+
+    if( isset($this->config['sharedCache']) ) {
+      $sharedCache = is_file($this->config['sharedCache']) 
+                   ? json_decode( file_get_contents($this->config['sharedCache']), true )
+                   : [];
+      
+      foreach ($r as $idString => $fil) {
+        $sharedCache[$idString] = $fil;
+      }
+      file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
     }
 
     return $r;
