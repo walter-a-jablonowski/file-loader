@@ -19,7 +19,8 @@ $config = [
   'prefixes'    => ['#', 'id-'],  // ID prefixes to look for
   // 'prefixes' => null,          // no prefixes (tags)
   'loadFolder'  => false,         // load filder path only, instead default is - DESC
-  'msgCallback' => null           // Callback function for processing messages
+  'msgCallback' => null,          // Callback function for processing messages
+  'descPattern' => '/^-\s*DESC/'  // Pattern for description files (regex)
 ];
 
 $config = [
@@ -71,7 +72,11 @@ find_desc()
 ### find_desc()
 
 ```php
+// Using default pattern '/^-\s*DESC/'
 $desc_file = find_desc($dir);
+
+// Using custom pattern
+$desc_file = find_desc($dir, '/^README/');
 ```
 
 Performance

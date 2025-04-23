@@ -12,10 +12,10 @@ function source( $base, $id_string, $cache_fil, $config = [])
   return $loader->source( $base, $id_string );
 }
 
-function find_desc( $dir )
+function find_desc( $dir, $descPattern = '/^-\s*DESC/' )
 {
   foreach( scandir($dir) as $file) {
-    if( preg_match('/^-\s*DESC/', $file))
+    if( preg_match($descPattern, $file))
       return "$dir/$file";
   }
 
@@ -32,9 +32,10 @@ class FileLoader
     $this->cacheFil = $cacheFil;
 
     $config = array_merge([
-      'prefixes'   => ['#', 'id-'],
-      'loadFolder' => false,
-      'msgCallback' => null
+      'prefixes'    => ['#', 'id-'],
+      'loadFolder'  => false,
+      'msgCallback' => null,
+      'descPattern' => '/^-\s*DESC/'
     ], $config );
 
     $config['prefixes'] = is_null( $config['prefixes']) ? [''] : $config['prefixes'];  // enables ['prefixes' => null]
@@ -105,7 +106,7 @@ class FileLoader
         $r = "$cache[$idString]/$sub";
 
         if( is_dir($r) )
-          return find_desc( $r );
+          return find_desc( $r, $this->config['descPattern'] );
         else
         {
           $r .= ( strpos( $sub, '.') !== false ? '' : '.md');
@@ -118,7 +119,7 @@ class FileLoader
       }
       elseif( is_dir($cache[$idString]))
         if( ! $this->config['loadFolder'])
-          return find_desc( $cache[$idString] );
+          return find_desc( $cache[$idString], $this->config['descPattern'] );
         else
           return $cache[$idString];
       else
@@ -161,7 +162,7 @@ class FileLoader
       $r = "$fil/$sub";
 
       if( is_dir($r) )
-        return find_desc( $r );
+        return find_desc( $r, $this->config['descPattern'] );
       else
       {
         $r .= ( strpos( $sub, '.') !== false ? '' : '.md');
@@ -175,7 +176,7 @@ class FileLoader
     elseif( is_dir($fil))
     {
       if( ! $this->config['loadFolder'])
-        return find_desc( $cache[$idString] );
+        return find_desc( $cache[$idString], $this->config['descPattern'] );
       else
         return $cache[$idString];
     }

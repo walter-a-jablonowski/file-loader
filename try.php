@@ -162,7 +162,8 @@ function message_handler( $type, $arg1 = null ) {
 
 $config = [
   'prefixes'    => ['#', 'id-'],
-  'msgCallback' => 'message_handler'
+  'msgCallback' => 'message_handler',
+  'descPattern' => '/^-\s*DESC/'  // Default pattern for description files
 ];
 
 // Case 1: Preload specific IDs
@@ -271,7 +272,7 @@ echo $file
   <h2 class="test-header">Case 5: Find description file</h2>
 <?php
 
-$desc_file = find_desc('debug/base_1/folder1');
+$desc_file = find_desc('debug/base_1/folder1', $config['descPattern']);
 echo $desc_file 
   ? "<div class='success'>Found description file: <span class='file-path'>" . htmlspecialchars($desc_file) . "</span></div>"
   : "<div class='error'>Description file missing</div>";
