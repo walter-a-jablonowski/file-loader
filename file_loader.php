@@ -72,7 +72,7 @@ class FileLoader
 
     file_put_contents( $this->cacheFil, json_encode( $r, JSON_PRETTY_PRINT));
 
-    // Shared cache (update)
+    // Shared cache (update only if set in config)
     $this->updateSharedCache($r);
   }
 
@@ -196,7 +196,7 @@ class FileLoader
 
       file_put_contents( $this->cacheFil, json_encode( $cache, JSON_PRETTY_PRINT));
       
-      // Shared cache (update)
+      // Shared cache (update only if set in config)
       $this->updateSharedCache([$idString => $fil]);
     }
 
