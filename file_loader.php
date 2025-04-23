@@ -125,20 +125,24 @@ class FileLoader
 
     // Check shared cache if available
 
-    if( isset($this->config['sharedCache']) && is_file($this->config['sharedCache']) ) {
+    if( isset($this->config['sharedCache']) && is_file($this->config['sharedCache']))
+    {
       $sharedCache = json_decode( file_get_contents($this->config['sharedCache']), true );
       
       if( isset($sharedCache[$idString]) && file_exists($sharedCache[$idString]) ) {
-        // Found in shared cache, update local cache
-        if( !is_array($cache) ) {
-          $cache = [];
-        }
         
-        $cache[$idString] = $sharedCache[$idString];
+        // Found in shared cache, update local cache
+        
+        if( ! is_array($cache))
+          $cache = [];
+        
+        $this->cache[$idString] = $sharedCache[$idString];
         file_put_contents( $this->cacheFil, json_encode( $cache, JSON_PRETTY_PRINT));
         
         // Return the file with same logic as above
-        if( $sub ) {
+        
+        if( $sub )
+        {
           $r = "$cache[$idString]/$sub";
           
           if( is_dir($r) )
