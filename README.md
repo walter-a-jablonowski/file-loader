@@ -17,6 +17,7 @@ Config
 ```php
 $config = [
   'prefixes'    => ['#', 'id-'],  // ID prefixes to look for
+  // 'prefixes' => null,          // no prefixes (tags)
   'loadFolder'  => false,         // load filder path only, instead default is - DESC
   'msgCallback' => null           // Callback function for processing messages
 ];
@@ -35,8 +36,6 @@ $config = [
     }
   };
 ];
-
-$config = ['prefixes' => null];  // no prefixes (tags)
 ```
 
 preload_sources()
