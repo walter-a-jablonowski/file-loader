@@ -74,14 +74,15 @@ class FileLoader
 
     // Shared cache (update)
 
-    if( isset($this->config['sharedCache']) ) {
+    if( isset($this->config['sharedCache']) )
+    {
       $sharedCache = is_file($this->config['sharedCache']) 
                    ? json_decode( file_get_contents($this->config['sharedCache']), true )
                    : [];
       
-      foreach ($r as $idString => $fil) {
+      foreach( $r as $idString => $fil)
         $sharedCache[$idString] = $fil;
-      }
+      
       file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
     }
   }
@@ -208,7 +209,8 @@ class FileLoader
       
       // Shared cache (update)
 
-      if( isset($this->config['sharedCache']) ) {
+      if( isset($this->config['sharedCache']) )
+      {
         $sharedCache = is_file($this->config['sharedCache']) 
                      ? json_decode( file_get_contents($this->config['sharedCache']), true )
                      : [];
@@ -312,19 +314,6 @@ class FileLoader
         if( ! in_array('*', $idStrings) && count($r) === count($idStrings))
           return $r;
       }
-    }
-
-    // Shared cache (update)
-
-    if( isset($this->config['sharedCache']) ) {
-      $sharedCache = is_file($this->config['sharedCache']) 
-                   ? json_decode( file_get_contents($this->config['sharedCache']), true )
-                   : [];
-      
-      foreach ($r as $idString => $fil) {
-        $sharedCache[$idString] = $fil;
-      }
-      file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
     }
 
     return $r;
