@@ -17,7 +17,7 @@ Config
 ```php
 $config = [
   'prefixes'   => ['#', 'id-'],  // ID prefixes to look for
-  'loadFolder' => false,         // default is - DESC
+  'loadFolder' => false,         // load filder path only, instead default is - DESC
   'useMsgs'    => false          // Show processing messages
 ];
 
