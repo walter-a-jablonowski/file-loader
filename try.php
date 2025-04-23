@@ -138,7 +138,7 @@ $cache_file = 'debug/cache.json';
 <?php
 
 // Define message callback function
-function message_handler( $type, $arg1 = null ) {
+function message_handler( $type, $arg1 = null ) {  // or use the msgs lib
   if( ! ob_get_level()) ob_start();
   
   switch( $type ) {

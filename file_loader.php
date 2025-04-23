@@ -55,8 +55,6 @@ class FileLoader
     if( is_string($bases))
       $bases = [$bases];
 
-    // TASK: Fallback: rm the # from source idString arg (cause used in dashb)
-
     foreach( $idStrings as &$idString )
     {
       $idString = str_replace('id-', '', $idString );
@@ -76,8 +74,6 @@ class FileLoader
 
   public function source( $base, $idString )
   {
-    // TASK: Fallback: rm the # from source idString arg (cause used in dashb)
-
     $idString = str_replace('id-', '', $idString );
     $idString = ltrim( $idString, "# ");  // maybe problems
     // $idString = preg_replace('/^[#\s]+/', '', $idString);
