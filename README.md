@@ -1,2 +1,77 @@
-# file-loader
-Get file based in id string
+# File Loader
+
+Finds a file by an "id string" in the file name. Enables accessing it when moved.
+
+Alternative: Symfony finder
+
+- [Config](#config)
+- [preload_sources()](#preload_sources)
+- [source()](#source)
+- [find_desc()](#find_desc)
+- [Performance](#performance)
+
+Config
+----------------------------------------------------------
+### Config
+
+```php
+$config = [
+  'prefixes'   => ['#', 'id-'],  // ID prefixes to look for
+  'loadFolder' => false,         // default is - DESC
+  'useMsgs'    => false          // Show processing messages
+];
+
+$config = ['prefixes' => null];  // no prefixes (tags)
+```
+
+preload_sources()
+----------------------------------------------------------
+### preload_sources()
+
+preload if many, e.g. in case flds renamed (only once for all fil)
+
+```php
+preload_sources({'base_1', 'base_2'], ['MyId', 'MyId2'], 'cache/files.json');
+preload_sources({'base_1', 'base_2'], '*', 'cache/files.json');
+```
+
+source()
+----------------------------------------------------------
+### source()
+
+```php
+$file = source('base_1', 'MyId', 'cache/files.json');
+
+$file = source('base_1', 'MyId/sub/file',     'cache/files.json');  // default ext .md
+$file = source('base_1', 'MyId/sub/file.txt', 'cache/files.json');
+
+$file = source('base_1', 'MyId/subfolder', 'cache/files.json');     // will find the - DESC file
+
+$file = source('base_1', 'MyId/subfolder', 'cache/files.json', [
+  'loadFolder' => true
+]);
+```
+
+find_desc()
+----------------------------------------------------------
+### find_desc()
+
+```php
+$desc_file = find_desc($dir);
+```
+
+Performance
+----------------------------------------------------------
+### Performance
+
+- using a base in source as arg speeds up cause we don't have to look through all
+
+
+LICENSE
+----------------------------------------------------------
+
+Copyright (C) Walter A. Jablonowski 2024-2025, free under the [MIT license](LICENSE)
+
+This app is build upon PHP and free software (see [credits](credits.md)).
+
+[Privacy](https://walter-a-jablonowski.github.io/privacy.html) | [Legal](https://walter-a-jablonowski.github.io/imprint.html)
