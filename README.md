@@ -77,8 +77,11 @@ $desc_file = find_desc($dir, '/^README/');  // user defined
 Performance
 ----------------------------------------------------------
 
-- using a base in source as arg speeds up cause we don't have to look through all
-- using a shared cache can improve performance by avoiding repeated searches for common files
+- usgae
+  - using a shared cache can improve performance by avoiding repeated searches for common files
+- libary
+  - performs a relative search from last file location if which is faster than looking through a large file tree
+  - the arg base in source() function speeds up cause we don't have to look through all folder if multiple large
 
 
 LICENSE
