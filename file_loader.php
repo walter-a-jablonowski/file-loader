@@ -73,18 +73,7 @@ class FileLoader
     file_put_contents( $this->cacheFil, json_encode( $r, JSON_PRETTY_PRINT));
 
     // Shared cache (update)
-
-    if( isset($this->config['sharedCache']) )
-    {
-      $sharedCache = is_file($this->config['sharedCache']) 
-                   ? json_decode( file_get_contents($this->config['sharedCache']), true )
-                   : [];
-      
-      foreach( $r as $idString => $fil)
-        $sharedCache[$idString] = $fil;
-      
-      file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
-    }
+    $this->updateSharedCache($r);
   }
 
   public function source( $base, $idString )
@@ -208,16 +197,7 @@ class FileLoader
       file_put_contents( $this->cacheFil, json_encode( $cache, JSON_PRETTY_PRINT));
       
       // Shared cache (update)
-
-      if( isset($this->config['sharedCache']) )
-      {
-        $sharedCache = is_file($this->config['sharedCache']) 
-                     ? json_decode( file_get_contents($this->config['sharedCache']), true )
-                     : [];
-        
-        $sharedCache[$idString] = $fil;
-        file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
-      }
+      $this->updateSharedCache([$idString => $fil]);
     }
 
     // Return
@@ -368,6 +348,30 @@ class FileLoader
     }
 
     return null;
+  }
+  
+  /**
+   * Updates the shared cache with new file locations
+   * 
+   * @param array $newEntries Associative array of ID strings and file paths
+   * @return void
+   */
+  private function updateSharedCache( array $newEntries ) : void
+  {
+    if( ! isset($this->config['sharedCache']) )
+      return;
+      
+    $sharedCache = is_file($this->config['sharedCache']) 
+                 ? json_decode( file_get_contents($this->config['sharedCache']), true )
+                 : [];
+    
+    if( ! is_array($sharedCache) )
+      $sharedCache = [];
+    
+    foreach( $newEntries as $idString => $fil )
+      $sharedCache[$idString] = $fil;
+    
+    file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
   }
 }
 
