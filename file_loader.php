@@ -34,8 +34,9 @@ class FileLoader
     $config = array_merge([
       'prefixes'    => ['#', 'id-'],
       'loadFolder'  => false,
-      'msgCallback' => null,
-      'descPattern' => '/^-\s*DESC/'
+      'descPattern' => '/^-\s*DESC/',
+      'sharedCache' => null,
+      'msgCallback' => null
     ], $config );
 
     $config['prefixes'] = is_null( $config['prefixes']) ? [''] : $config['prefixes'];  // enables ['prefixes' => null]
@@ -120,6 +121,46 @@ class FileLoader
           return $cache[$idString];
       else
         return $cache[$idString];
+    }
+
+    // Check shared cache if available
+
+    if( isset($this->config['sharedCache']) && is_file($this->config['sharedCache']) ) {
+      $sharedCache = json_decode( file_get_contents($this->config['sharedCache']), true );
+      
+      if( isset($sharedCache[$idString]) && file_exists($sharedCache[$idString]) ) {
+        // Found in shared cache, update local cache
+        if( !is_array($cache) ) {
+          $cache = [];
+        }
+        
+        $cache[$idString] = $sharedCache[$idString];
+        file_put_contents( $this->cacheFil, json_encode( $cache, JSON_PRETTY_PRINT));
+        
+        // Return the file with same logic as above
+        if( $sub ) {
+          $r = "$cache[$idString]/$sub";
+          
+          if( is_dir($r) )
+            return find_desc( $r, $this->config['descPattern'] );
+          else {
+            $r .= ( strpos( $sub, '.') !== false ? '' : '.md');
+            
+            if( file_exists($r) )
+              return $r;
+            else
+              return null;
+          }
+        }
+        elseif( is_dir($cache[$idString])) {
+          if( ! $this->config['loadFolder'])
+            return find_desc( $cache[$idString], $this->config['descPattern'] );
+          else
+            return $cache[$idString];
+        }
+        else
+          return $cache[$idString];
+      }
     }
 
     // Fil moved: upd cache

@@ -1,4 +1,8 @@
 
+Add an argument "sharedCache" in config which is an alternative json cache for $this->cacheFil. If a file can't be found in the source() function look in the shared cache if the id string is there. If the file associated with the id string exists update $this->cacheFil and save it. Else: proceed with updating the regulat cache as currently implemented in source(). Don't edit try.php this time.
+
+ --
+
 I want to rework the UI messaging in file_loader.php. Instead of the useMsgs argument use a callback and place the messages there. The callback should take an argument that tells the type of message, e.g. "update_cache" and one or more further arguments e.g. for $isString. Choose type strings that make sense. Also update try.php and use the callback so that the resulting messages are basically the same as currently.
 
  --
