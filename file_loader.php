@@ -12,7 +12,7 @@ function source( $base, $id_string, $cache_fil, $config = [])
   return $loader->source( $base, $id_string );
 }
 
-function find_desc( $dir, $descPattern = '/^-\s*DESC/' )
+function find_desc( $dir, $descPattern = '/^-\s*DESC/')
 {
   foreach( scandir($dir) as $file) {
     if( preg_match($descPattern, $file))

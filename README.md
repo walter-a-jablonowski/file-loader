@@ -19,13 +19,10 @@ $config = [
   'prefixes'    => ['#', 'id-'],  // ID prefixes to look for
   // 'prefixes' => null,          // no prefixes (tags)
   'loadFolder'  => false,         // load filder path only, instead default is - DESC
-  'msgCallback' => null,          // Callback function for processing messages
-  'descPattern' => '/^-\s*DESC/'  // Pattern for description files (regex)
-];
+  'descPattern' => '/^-\s*DESC/', // Pattern for description files (regex)
+  'sharedCache' => null,          // Path to a shared cache file (fallback)
 
-$config = [
-  'prefixes'    => ['#', 'id-'],
-  'msgCallback' => function ( $type, $arg1 = null ) {
+  'msgCallback' => function ( $type, $arg1 = null ) {  // (non-required) callback for ui messages
     switch( $type ) {
       case 'update_cache_start':
         echo "<b>Updating cache for $arg1 ...</b><br>\n";
@@ -35,7 +32,7 @@ $config = [
         break;
       // misc message types: update_cache_end, processing_file_relative
     }
-  };
+  }
 ];
 ```
 
@@ -47,7 +44,7 @@ preload if many, e.g. in case flds renamed (only once for all fil)
 
 ```php
 preload_sources({'base_1', 'base_2'], ['MyId', 'MyId2'], 'cache/files.json');
-preload_sources({'base_1', 'base_2'], '*', 'cache/files.json');
+preload_sources({'base_1', 'base_2'], '*', 'cache/files.json');  // see also config
 ```
 
 source()
@@ -64,6 +61,7 @@ $file = source('base_1', 'MyId/subfolder', 'cache/files.json');     // will find
 
 $file = source('base_1', 'MyId/subfolder', 'cache/files.json', [
   'loadFolder' => true
+  // see config
 ]);
 ```
 
@@ -72,18 +70,15 @@ find_desc()
 ### find_desc()
 
 ```php
-// Using default pattern '/^-\s*DESC/'
-$desc_file = find_desc($dir);
-
-// Using custom pattern
-$desc_file = find_desc($dir, '/^README/');
+$desc_file = find_desc($dir);  // default pattern '/^-\s*DESC/'
+$desc_file = find_desc($dir, '/^README/');  // user defined
 ```
 
 Performance
 ----------------------------------------------------------
-### Performance
 
 - using a base in source as arg speeds up cause we don't have to look through all
+- using a shared cache can improve performance by avoiding repeated searches for common files
 
 
 LICENSE
