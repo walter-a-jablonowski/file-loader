@@ -137,9 +137,32 @@ $cache_file = 'debug/cache.json';
   <h1>File Loader Test Results</h1>
 <?php
 
+// Define message callback function
+function message_handler( $type, $arg1 = null ) {
+  if( ! ob_get_level()) ob_start();
+  
+  switch( $type ) {
+    case 'update_cache_start':
+      echo "<b>Updating cache for $arg1 ...</b><br><br>\n\n";
+      break;
+    case 'update_cache_end':
+      echo "<br><br>\n\n";
+      break;
+    case 'processing_file':
+      echo "<b>Processing:</b> $arg1<br>\n";
+      break;
+    case 'processing_file_relative':
+      echo "<b>Processing (relative):</b> $arg1<br>\n";
+      break;
+  }
+  
+  ob_flush();
+  flush();
+}
+
 $config = [
-  'prefixes' => ['#', 'id-'],
-  'useMsgs'  => true
+  'prefixes'    => ['#', 'id-'],
+  'msgCallback' => 'message_handler'
 ];
 
 // Case 1: Preload specific IDs

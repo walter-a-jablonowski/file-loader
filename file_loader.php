@@ -34,7 +34,7 @@ class FileLoader
     $config = array_merge([
       'prefixes'   => ['#', 'id-'],
       'loadFolder' => false,
-      'useMsgs'    => false
+      'msgCallback' => null
     ], $config );
 
     $config['prefixes'] = is_null( $config['prefixes']) ? [''] : $config['prefixes'];  // enables ['prefixes' => null]
@@ -127,11 +127,8 @@ class FileLoader
 
     // Fil moved: upd cache
 
-    if( $this->config['useMsgs']) {
-      if( ! ob_get_level()) ob_start();
-      echo "<b>Updating cache for $idString ...</b><br><br>\n\n";
-      ob_flush();
-      flush();
+    if( isset($this->config['msgCallback']) && is_callable($this->config['msgCallback']) ) {
+      call_user_func($this->config['msgCallback'], 'update_cache_start', $idString);
     }
 
     if( ! isset( $cache[$idString]))  // was missing in cache
@@ -142,10 +139,8 @@ class FileLoader
     else                              // was in cache but file missing
       $fil = $this->relativeSrc( dirname($cache[$idString]), $idString, $base );
 
-    if( $this->config['useMsgs']) {
-      echo "<br><br>\n\n";
-      ob_flush();
-      flush();
+    if( isset($this->config['msgCallback']) && is_callable($this->config['msgCallback']) ) {
+      call_user_func($this->config['msgCallback'], 'update_cache_end');
     }
 
     // Save cache
@@ -206,11 +201,8 @@ class FileLoader
       if( in_array( $fil, ['.', '..']))
         continue;
 
-      if( $this->config['useMsgs']) {
-        // TASI: AI "In recurse(), the output buffering might cause memory issues with very large dirs"
-        echo "<b>Processing:</b> $dir/$fil<br>\n";
-        flush();
-        ob_flush();
+      if( isset($this->config['msgCallback']) && is_callable($this->config['msgCallback']) ) {
+        call_user_func($this->config['msgCallback'], 'processing_file', "$dir/$fil");
       }
 
       // id = * => get all ids
@@ -276,10 +268,8 @@ class FileLoader
       if( in_array( $fil, ['.', '..']))
         continue;
 
-      if( $this->config['useMsgs']) {
-        echo "<b>Processing (relative):</b> $dir/$fil<br>\n";
-        flush();
-        ob_flush();
+      if( isset($this->config['msgCallback']) && is_callable($this->config['msgCallback']) ) {
+        call_user_func($this->config['msgCallback'], 'processing_file_relative', "$dir/$fil");
       }
 
       // Check if file or folder has id

@@ -1,4 +1,8 @@
 
+I want to rework the UI messaging in file_loader.php. Instead of the useMsgs argument use a callback and place the messages there. The callback should take an argument that tells the type of message, e.g. "update_cache" and one or more further arguments e.g. for $isString. Choose type strings that make sense. Also update try.php and use the callback so that the resulting messages are basically the same as currently.
+
+ --
+
 Relative src
 
 In a new file make a algrithm that looks for a file with a certain string in name that may have one of multiple prefixes. IF the file can't be found in the start dir go one level up and look through this folder and it sub folders (except the one that we just processed). Repeat this until we processed a given base dir. If the file can't be found retrun null.
