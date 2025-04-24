@@ -101,29 +101,7 @@ class FileLoader
   
     if( isset( $cache[$idString]) && file_exists( $cache[$idString]))  // may be fil or fld
     {
-      if( $sub )
-      {
-        $r = "$cache[$idString]/$sub";
-
-        if( is_dir($r) )
-          return find_desc( $r, $this->config['descPattern'] );
-        else
-        {
-          $r .= ( strpos( $sub, '.') !== false ? '' : '.md');
-    
-          if( file_exists($r) )
-            return $r;
-          else
-            return null;
-        }
-      }
-      elseif( is_dir($cache[$idString]))
-        if( ! $this->config['loadFolder'])
-          return find_desc( $cache[$idString], $this->config['descPattern'] );
-        else
-          return $cache[$idString];
-      else
-        return $cache[$idString];
+      return $this->resolveFilePath($cache[$idString], $sub);
     }
 
     // Shared cache
@@ -143,30 +121,7 @@ class FileLoader
         file_put_contents( $this->cacheFil, json_encode( $cache, JSON_PRETTY_PRINT));
         
         // Return the file with same logic as above
-        
-        if( $sub )
-        {
-          $r = "$cache[$idString]/$sub";
-          
-          if( is_dir($r) )
-            return find_desc( $r, $this->config['descPattern'] );
-          else {
-            $r .= ( strpos( $sub, '.') !== false ? '' : '.md');
-            
-            if( file_exists($r) )
-              return $r;
-            else
-              return null;
-          }
-        }
-        elseif( is_dir($cache[$idString])) {
-          if( ! $this->config['loadFolder'])
-            return find_desc( $cache[$idString], $this->config['descPattern'] );
-          else
-            return $cache[$idString];
-        }
-        else
-          return $cache[$idString];
+        return $this->resolveFilePath($cache[$idString], $sub);
       }
     }
 
@@ -204,31 +159,8 @@ class FileLoader
 
     if( ! $fil )
       return null;
-    elseif( $sub )
-    {
-      $r = "$fil/$sub";
-
-      if( is_dir($r) )
-        return find_desc( $r, $this->config['descPattern'] );
-      else
-      {
-        $r .= ( strpos( $sub, '.') !== false ? '' : '.md');
-  
-        if( file_exists($r) )
-          return $r;
-        else
-          return null;
-      }
-    }
-    elseif( is_dir($fil))
-    {
-      if( ! $this->config['loadFolder'])
-        return find_desc( $fil, $this->config['descPattern'] );
-      else
-        return $fil;
-    }
-    else
-      return $fil;
+    
+    return $this->resolveFilePath($fil, $sub);
   }
 
   private function recurse( $dir, $idStrings = '*' )
@@ -372,6 +304,42 @@ class FileLoader
       $sharedCache[$idString] = $fil;
     
     file_put_contents( $this->config['sharedCache'], json_encode( $sharedCache, JSON_PRETTY_PRINT));
+  }
+  
+  /**
+   * Resolves a file path based on the base path and optional sub path
+   * 
+   * @param string $filePath Base file or folder path
+   * @param string|null $subPath Optional sub path
+   * @return string|null Resolved file path or null if not found
+   */
+  private function resolveFilePath( string $filePath, ?string $subPath = null ) : ?string
+  {
+    if( $subPath )
+    {
+      $r = "$filePath/$subPath";
+
+      if( is_dir($r) )
+        return find_desc( $r, $this->config['descPattern'] );
+      else
+      {
+        $r .= ( strpos( $subPath, '.') !== false ? '' : '.md');
+  
+        if( file_exists($r) )
+          return $r;
+        else
+          return null;
+      }
+    }
+    elseif( is_dir($filePath))
+    {
+      if( ! $this->config['loadFolder'])
+        return find_desc( $filePath, $this->config['descPattern'] );
+      else
+        return $filePath;
+    }
+    else
+      return $filePath;
   }
 }
 
