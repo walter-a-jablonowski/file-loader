@@ -16,7 +16,6 @@ Alternative: Symfony finder
 
 Config
 ----------------------------------------------------------
-### Config
 
 ```php
 $config = [
@@ -42,7 +41,6 @@ $config = [
 
 preload_sources()
 ----------------------------------------------------------
-### preload_sources()
 
 preload if many, e.g. in case flds renamed (only once for all fil)
 
@@ -53,7 +51,6 @@ preload_sources({'base_1', 'base_2'], '*', 'cache/files.json');  // see also con
 
 source()
 ----------------------------------------------------------
-### source()
 
 ```php
 $file = source('base_1', 'MyId', 'cache/files.json');
@@ -71,7 +68,6 @@ $file = source('base_1', 'MyId/subfolder', 'cache/files.json', [
 
 find_desc()
 ----------------------------------------------------------
-### find_desc()
 
 ```php
 $desc_file = find_desc($dir);  // default pattern '/^-\s*DESC/'
