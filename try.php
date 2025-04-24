@@ -96,7 +96,7 @@ $cache_file = 'debug/cache.json';
 <!DOCTYPE html>
 <html>
 <head>
-  <title>File Loader Test Results</title>
+  <title>File Loader</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -134,7 +134,7 @@ $cache_file = 'debug/cache.json';
   </style>
 </head>
 <body>
-  <h1>File Loader Test Results</h1>
+  <h1>File Loader</h1>
 <?php
 
 // Define message callback function

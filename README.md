@@ -10,6 +10,8 @@ Alternative: Symfony finder
 - [find_desc()](#find_desc)
 - [Performance](#performance)
 
+![alt text](misc/img.png)
+
 Config
 ----------------------------------------------------------
 ### Config
