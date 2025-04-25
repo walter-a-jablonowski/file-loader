@@ -21,7 +21,7 @@ Config
 $config = [
   'prefixes'    => ['#', 'id-'],  // ID prefixes to look for
   // 'prefixes' => null,          // no prefixes (tags)
-  'loadFolder'  => false,         // load filder path only, instead default is - DESC
+  'loadFolder'  => false,         // load folder path only, instead default is - DESC
   'descPattern' => '/^-\s*DESC/', // Pattern for description files (regex)
   'sharedCache' => null,          // Path to a shared cache file (fallback)
 
