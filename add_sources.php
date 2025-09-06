@@ -10,9 +10,9 @@ $bases = [
 ];
 
 $cache    = 'debug/cache.json';
-
 $base_key = $argc > 1 ? $argv[1] : 'DEBUG';
 $base     = $bases[$base_key] ?? '.';
+
 $ids      = $argc > 2 ? array_slice( $argv, 2 ) : ['*'];
 
 add_sources( [$base], $ids, $cache, [
