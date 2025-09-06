@@ -2,18 +2,15 @@
 
 require_once 'file_loader.php';
 
+define('DEBUG', 'debug');
+
 // add an id "la" somewhere
 // php add_sources_debug.php la
 
-$bases = [
-  'DEBUG' => 'debug'
-];
+$cache = 'debug/cache.json';
+$base  = constant( $argv[1] );
 
-$cache    = 'debug/cache.json';
-$base_key = $argc > 1 ? $argv[1] : 'DEBUG';
-$base     = $bases[$base_key] ?? '.';
-
-$ids      = $argc > 2 ? array_slice( $argv, 2 ) : ['*'];
+$ids   = $argc > 2 ? array_slice( $argv, 2 ) : ['*'];
 
 add_sources( [$base], $ids, $cache, [
   'msgCallback' => function( $type, $arg1 = null ) {
