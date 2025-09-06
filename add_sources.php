@@ -3,7 +3,7 @@
 require_once 'file_loader.php';
 
 // add an id "la" somewhere
-// php add_sources_debug.php DEBUG la
+// php add_sources.php DEBUG la ...
 
 define('DEBUG', 'debug');
 
