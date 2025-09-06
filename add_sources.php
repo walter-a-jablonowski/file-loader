@@ -2,15 +2,24 @@
 
 require_once 'file_loader.php';
 
-define('DEBUG', 'debug');
-
 // add an id "la" somewhere
-// php add_sources_debug.php la
+// php add_sources_debug.php DEBUG la
+
+if( $argc < 3 ) {
+  echo "Error: At least 2 arguments required: <base_constant> <id1> [id2] ...\n";
+  exit(1);
+}
+
+if( ! defined( $argv[1] ) ) {
+  echo "Error: First argument must be a defined constant (e.g., DEBUG)\n";
+  exit(1);
+}
+
+define('DEBUG', 'debug');
 
 $cache = 'debug/cache.json';
 $base  = constant( $argv[1] );
-
-$ids   = $argc > 2 ? array_slice( $argv, 2 ) : ['*'];
+$ids   = array_slice( $argv, 2 );
 
 add_sources( [$base], $ids, $cache, [
   'msgCallback' => function( $type, $arg1 = null ) {
