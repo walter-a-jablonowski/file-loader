@@ -1,5 +1,7 @@
 <?php
 
+// TASK: maybe add add_sources()
+
 // Remove te /debug folder and run this 2 times
 // second run: move a file before (see case 6 in html page)
 
