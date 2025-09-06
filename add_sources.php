@@ -13,7 +13,7 @@ if( $argc < 3 ) {
 }
 
 if( ! defined( $argv[1] ) ) {
-  echo "Error: First argument must be a defined constant (e.g., DEBUG)\n";
+  echo "Error: First argument must be a defined constant (e.g. DEBUG)\n";
   exit(1);
 }
 
