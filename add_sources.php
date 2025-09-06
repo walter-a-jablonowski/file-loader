@@ -9,10 +9,11 @@ $bases = [
   'DEBUG' => 'debug'
 ];
 
+$cache    = 'debug/cache.json';
+
 $base_key = $argc > 1 ? $argv[1] : 'DEBUG';
 $base     = $bases[$base_key] ?? '.';
 $ids      = $argc > 2 ? array_slice( $argv, 2 ) : ['*'];
-$cache    = 'debug/cache.json';
 
 add_sources( [$base], $ids, $cache, [
   'msgCallback' => function( $type, $arg1 = null ) {
