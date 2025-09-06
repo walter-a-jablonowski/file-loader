@@ -6,6 +6,12 @@ function preload_sources( $bases, $id_strings, $cache_fil, $config = [])
   return $loader->preload( $bases, $id_strings );
 }
 
+function add_sources( $bases, $id_strings, $cache_fil, $config = [])
+{
+  $loader = new FileLoader( $cache_fil, $config );
+  return $loader->add( $bases, $id_strings );
+}
+
 function source( $base, $id_string, $cache_fil, $config = [])
 {
   $loader = new FileLoader( $cache_fil, $config );
@@ -51,6 +57,46 @@ class FileLoader
     idStrings: * or array of strings
 
   */
+  public function add( $bases, $idStrings )
+  {
+    if( is_string($bases))
+      $bases = [$bases];
+
+    foreach( $idStrings as &$idString )
+    {
+      $idString = str_replace('id-', '', $idString );
+      $idString = ltrim( $idString, "# ");  // maybe problems
+      // $idString = preg_replace('/^[#\s]+/', '', $idString);
+    }
+
+    // Load existing cache
+    $existing = is_file( $this->cacheFil)
+               ? json_decode( file_get_contents( $this->cacheFil), true)
+               : [];
+
+    if( ! is_array($existing))
+      $existing = [];
+
+    // Load new
+    $r = [];
+    foreach( $bases as $base)
+      // TASK: AI sees problems when keeping much data in mem ins of writing it in file
+      $r = array_merge( $r, $this->recurse( $base, $idStrings ));
+
+    // Merge
+    $r = array_merge( $existing, $r );
+
+    file_put_contents( $this->cacheFil, json_encode( $r, JSON_PRETTY_PRINT));
+
+    // Shared cache (update only if set in config)
+    $this->updateSharedCache($r);
+  }
+
+  /*
+  ARGS
+    bases:     string or array of strings
+    idStrings: * or array of strings
+  */
   public function preload( $bases, $idStrings )
   {
     if( is_string($bases))
@@ -63,17 +109,11 @@ class FileLoader
       // $idString = preg_replace('/^[#\s]+/', '', $idString);
     }
 
-    // Load
+    // Clear cache
+    if( file_exists( $this->cacheFil ) )
+      unlink( $this->cacheFil );
 
-    $r = [];
-    foreach( $bases as $base)
-      // TASK: AI sees problems when keeping much data in mem ins of writing it in file
-      $r = array_merge( $r, $this->recurse( $base, $idStrings ));
-
-    file_put_contents( $this->cacheFil, json_encode( $r, JSON_PRETTY_PRINT));
-
-    // Shared cache (update only if set in config)
-    $this->updateSharedCache($r);
+    $this->add( $bases, $idStrings );
   }
 
   public function source( $base, $idString )

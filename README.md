@@ -6,6 +6,7 @@ Alternative: Symfony finder
 
 - [Config](#config)
 - [preload_sources()](#preload_sources)
+- [add_sources()](#add_sources)
 - [source()](#source)
 - [find_desc()](#find_desc)
 - [Performance](#performance)
@@ -42,11 +43,21 @@ $config = [
 preload_sources()
 ----------------------------------------------------------
 
-preload if many, e.g. in case flds renamed (only once for all fil)
+preload if many, e.g. in case flds renamed (only once for all fil). **Overwrites the entire cache.**
 
 ```php
 preload_sources({'base_1', 'base_2'], ['MyId', 'MyId2'], 'cache/files.json');
 preload_sources({'base_1', 'base_2'], '*', 'cache/files.json');  // see also config
+```
+
+add_sources()
+----------------------------------------------------------
+
+Add new sources to existing cache without overwriting. Useful for incremental updates.
+
+```php
+add_sources({'base_1', 'base_2'], ['NewId', 'AnotherId'], 'cache/files.json');
+add_sources({'base_1', 'base_2'], '*', 'cache/files.json');  // see also config
 ```
 
 source()
