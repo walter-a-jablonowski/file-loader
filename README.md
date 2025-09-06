@@ -60,6 +60,8 @@ add_sources({'base_1', 'base_2'], ['NewId', 'AnotherId'], 'cache/files.json');
 add_sources({'base_1', 'base_2'], '*', 'cache/files.json');  // see also config
 ```
 
+Copy add_sources.php to use it from command line
+
 source()
 ----------------------------------------------------------
 
